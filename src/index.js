@@ -14,6 +14,8 @@ app.use("/auth", userController);
 app.use("/inventory", inventoryController);
 app.use("/order", orderControllers);
 
-app.listen(5000, () => {
-    console.log("Listening...");
+const PORT = 5000;
+
+app.listen(PORT, () => {
+    console.log(`Listening on Port: ${PORT}`);
 });

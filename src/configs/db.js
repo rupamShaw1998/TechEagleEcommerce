@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 require('dotenv').config();
 
-const URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/Note_Taker/TechEagle";
+const URI = "mongodb+srv://rupamShaw1998:rupam@cluster0.5rqasic.mongodb.net/TechEagle";
 
 const connect = mongoose
   .connect(URI)

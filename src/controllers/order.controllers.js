@@ -1,18 +1,15 @@
 const express = require('express');
-const { Order } = require('../models/order.models');
+const Order = require('../models/order.models');
 
 const router = express.Router();
 
 router.post('/place-order', async (req, res) => {
   try {
-    const order = new Order({
-      customerId: req.body.customerId,
-      products: req.body.products,
-    });
-    await order.save();
-    res.status(201).json({ message: 'Order placed successfully' });
+    const { customerId, products } = req.body;
+    const order = await Order.create({ customerId, products });
+    return res.status(201).send('Order placed successfully');
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).send(error);
   }
 });
 
@@ -23,9 +20,9 @@ router.patch('/update-order/:orderId', async (req, res) => {
       { status: req.body.status },
       { new: true }
     );
-    res.status(200).json(updatedOrder);
+    return res.status(200).send(updatedOrder);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).send(error);
   }
 });
 

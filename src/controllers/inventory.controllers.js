@@ -1,31 +1,25 @@
 const express = require('express');
-const { Product } = require('../models/product.models');
+const Product = require('../models/product.models');
+const authTokenVerification = require('../middlewares/auth');
 
 const router = express.Router();
 
 router.post('/add-product', async (req, res) => {
   try {
-    const product = new Product({
-      name: req.body.name,
-      image: req.body.image,
-      description: req.body.description,
-      weight: req.body.weight,
-      quantity: req.body.quantity,
-      price: req.body.price,
-    });
-    await product.save();
-    res.status(201).json({ message: 'Product added to inventory successfully' });
+    const { name, image, description, weight, quantity, price } = req.body;
+    const product = await Product.create({ name, image, description, weight, quantity, price });
+    return res.status(201).send('Product added to inventory successfully');
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).send(error);
   }
 });
 
-router.get('/get-inventory', async (req, res) => {
+router.get('/get-inventory', authTokenVerification, async (req, res) => {
   try {
     const inventory = await Product.find();
-    res.status(200).json(inventory);
+    return res.status(200).send(inventory);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).send(error);
   }
 });
 
